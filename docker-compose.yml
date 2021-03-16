@@ -1,0 +1,32 @@
+version: "3.3"
+services:
+  server:
+    container_name: nba-api
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: postgres
+      POSTGRES_HOST: postgres
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        - http_proxy
+        - https_proxy
+        - no_proxy
+    image: nab-test/server:latest
+    ports:
+      - "8081:8081"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - postgres
+  postgres:
+    container_name: nba-postgres
+    image: postgres:9.6.1
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: postgres
